@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: batch-demo
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@//localhost:1521/FREEPDB1
+    username: CO
+    password: customer123
