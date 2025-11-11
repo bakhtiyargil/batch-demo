@@ -15,4 +15,14 @@ spring:
       idle-timeout: 60000
       max-lifetime: 1800000
       auto-commit: false
-      connection-test-query: SELECT 1
+      connection-test-query: SELECT 1 FROM DUAL
+  jpa:
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        order_updates: true
+        order_inserts: true
+        format_sql: false
