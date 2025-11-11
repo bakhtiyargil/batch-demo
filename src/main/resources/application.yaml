@@ -2,7 +2,7 @@ spring:
   application:
     name: batch-demo
   datasource:
-    driver-class-name: oracle.jdbc.OracleDriver
-    url: jdbc:oracle:thin:@//localhost:1521/FREEPDB1
-    username: CO
-    password: customer123
+    driver-class-name: ${ORACLE_DRIVER}
+    url: ${ORACLE_DB_URL}
+    username: ${ORACLE_DB_USER}
+    password: ${ORACLE_DB_PASS}
