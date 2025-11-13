@@ -24,6 +24,7 @@ public class OrderItemReader extends JdbcPagingItemReader<OrderItem> {
                            @Value("#{jobParameters['productId']}") Long productId) throws Exception {
         setDataSource(dataSource);
         setFetchSize(50);
+        setPageSize(50);
         setRowMapper((rs, rowNum) -> {
             OrderItem item = new OrderItem();
             OrderItemId id = new OrderItemId();
