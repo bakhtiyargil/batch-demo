@@ -6,6 +6,8 @@ import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import java.time.Duration;
+import java.time.Instant;
 
 @Component
 public class CommonJobScheduler {
@@ -18,14 +20,16 @@ public class CommonJobScheduler {
         this.productJob = productJob;
     }
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 30000)
     public void runJob() throws Exception {
         JobParameters params = new JobParametersBuilder()
                 .addLong("time", System.currentTimeMillis())
                 .addLong("productId", 13L)
                 .toJobParameters();
         System.out.println("Starting job...");
+        var start = Instant.now();
         jobLauncher.run(productJob, params);
-        System.out.println("Done job...");
+        var elapsed = Duration.between(start, Instant.now()).toMillis();
+        System.out.println("Done job... Elapsed: " + elapsed);
     }
 }

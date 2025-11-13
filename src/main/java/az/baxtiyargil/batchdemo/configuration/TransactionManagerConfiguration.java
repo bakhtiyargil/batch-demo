@@ -27,6 +27,9 @@ public class TransactionManagerConfiguration {
         return new DataSourceTransactionManager(dataSource);
     }
 
+    /**
+     * This is needed when the Spring Batch write step interacts with JPA.
+     */
     @Bean
     public JpaTransactionManager jpaTransactionManager(EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
