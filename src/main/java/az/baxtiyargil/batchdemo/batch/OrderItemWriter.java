@@ -13,6 +13,7 @@ public class OrderItemWriter extends JpaItemWriter<OrderItem> {
     /**
      * Using plain JDBC to read entities causes the JPA write step to run two queries:
      * first to fetch the entity into the persistence context, then to perform the update.
+     * Look: driving query pattern.
      */
     public OrderItemWriter(EntityManagerFactory managerFactory) {
         setEntityManagerFactory(managerFactory);
