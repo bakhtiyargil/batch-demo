@@ -26,3 +26,8 @@ spring:
         order_updates: true
         order_inserts: true
         format_sql: false
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: always

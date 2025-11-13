@@ -1,18 +1,36 @@
 package az.baxtiyargil.batchdemo.configuration;
 
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.core.configuration.support.DefaultBatchConfiguration;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.launch.support.TaskExecutorJobLauncher;
 import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
+import org.springframework.boot.autoconfigure.batch.BatchDataSourceScriptDatabaseInitializer;
+import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.lang.NonNull;
 import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
 @EnableBatchProcessing
-public class BatchConfiguration {
+public class BatchConfiguration extends DefaultBatchConfiguration {
+
+    private final DataSource dataSource;
+    private final PlatformTransactionManager transactionManager;
+
+    public BatchConfiguration(DataSource dataSource, PlatformTransactionManager transactionManager) {
+        this.dataSource = dataSource;
+        this.transactionManager = transactionManager;
+    }
+
+    /**
+     * Needed when Spring Batch tables are created.
+     */
+    @Bean
+    public BatchDataSourceScriptDatabaseInitializer batchDataSourceInitializer(BatchProperties batchProperties) {
+        return new BatchDataSourceScriptDatabaseInitializer(dataSource, batchProperties.getJdbc());
+    }
 
     /**
      * Creates and configures a {@link JobRepository} for Spring Batch.
@@ -21,13 +39,9 @@ public class BatchConfiguration {
      * It is added here for clarification and explicit control.</p>
      */
     @Bean
-    public JobRepository jobRepository(DataSource dataSource, PlatformTransactionManager transactionManager)
-            throws Exception {
-        JobRepositoryFactoryBean factory = new JobRepositoryFactoryBean();
-        factory.setDataSource(dataSource);
-        factory.setTransactionManager(transactionManager);
-        factory.afterPropertiesSet();
-        return factory.getObject();
+    @Override
+    public @NonNull JobRepository jobRepository() {
+        return super.jobRepository();
     }
 
     /**
@@ -38,10 +52,18 @@ public class BatchConfiguration {
      * You can set {@link org.springframework.core.task.TaskExecutor} for async execution.
      */
     @Bean
-    public JobLauncher jobLauncher(JobRepository jobRepository) throws Exception {
-        TaskExecutorJobLauncher launcher = new TaskExecutorJobLauncher();
-        launcher.setJobRepository(jobRepository);
-        launcher.afterPropertiesSet();
-        return launcher;
+    @Override
+    public @NonNull JobLauncher jobLauncher(@NonNull JobRepository jobRepository) {
+        return super.jobLauncher(jobRepository);
+    }
+
+    @Override
+    public @NonNull DataSource getDataSource() {
+        return this.dataSource;
+    }
+
+    @Override
+    public @NonNull PlatformTransactionManager getTransactionManager() {
+        return this.transactionManager;
     }
 }
