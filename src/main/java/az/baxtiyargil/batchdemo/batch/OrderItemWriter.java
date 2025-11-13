@@ -10,6 +10,10 @@ import org.springframework.stereotype.Component;
 @StepScope
 public class OrderItemWriter extends JpaItemWriter<OrderItem> {
 
+    /**
+     * Using plain JDBC to read entities causes the JPA write step to run two queries:
+     * first to fetch the entity into the persistence context, then to perform the update.
+     */
     public OrderItemWriter(EntityManagerFactory managerFactory) {
         setEntityManagerFactory(managerFactory);
     }

@@ -37,11 +37,11 @@ public class JobConfiguration {
                               OrderItemProcessor processor,
                               OrderItemWriter writer) {
         return new StepBuilder(ORDER_ITEM_STEP_NAME, jobRepository)
-                .<OrderItem, OrderItem>chunk(10, txManager)
+                .<OrderItem, OrderItem>chunk(50, txManager)
                 .reader(reader)
                 .processor(processor)
                 .writer(writer)
-                .taskExecutor(taskExecutor)
+                //.taskExecutor(taskExecutor)
                 .build();
     }
 }

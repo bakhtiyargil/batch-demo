@@ -26,6 +26,8 @@ spring:
         order_updates: true
         order_inserts: true
         format_sql: false
+        jdbc:
+          batch_size: 50
   batch:
     job:
       enabled: false
